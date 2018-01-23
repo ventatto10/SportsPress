@@ -514,7 +514,7 @@ if ( ! function_exists( 'sportspress_output_competition_events' ) ) {
 	function sportspress_output_competition_events() {
 		$id = get_the_ID();
 		$format = get_option( 'sportspress_competition_events_format', 'blocks' );
-		$filter = 'competition';
+		$filter = 'both';
 		$args = array( 
 				'post_type' => 'sp_calendar',
 				'posts_per_page' => 1, 
@@ -549,7 +549,7 @@ if ( ! function_exists( 'sportspress_output_competition_lists' ) ) {
 	function sportspress_output_competition_lists() {
 		$id = get_the_ID();
         $format = get_post_meta( $id, 'sp_format', true );
-		$filter = 'competition';
+		$filter = 'both';
 		$args = array( 
 				'post_type' => 'sp_list',
 				'posts_per_page' => 1, 
@@ -582,7 +582,7 @@ if ( ! function_exists( 'sportspress_output_competition_table' ) ) {
 	function sportspress_output_competition_table() {
 		$id = get_the_ID();
 		$format = get_post_meta( $id, 'sp_format', true );
-		$filter = 'competition';
+		$filter = 'both';
 		$args = array( 
 				'post_type' => 'sp_table',
 				'posts_per_page' => 1, 
