@@ -20,6 +20,13 @@ class SP_Meta_Box_List_Data {
 	 */
 	public static function output( $post ) {
 		$list = new SP_Player_List( $post );
+		
+		//Get competition id of Player List
+		$competition = get_post_meta( $post->ID, 'sp_competition', true );
+		if ( $competition > 0) {
+			$list->competition = $competition;
+		}
+		
 		list( $columns, $data, $placeholders, $merged, $orderby ) = $list->data( true );
 		$adjustments = $list->adjustments;
 		self::table( $columns, $data, $placeholders, $adjustments, $orderby );

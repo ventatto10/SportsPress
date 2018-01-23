@@ -25,6 +25,8 @@ $defaults = array(
 	'season' => null,
 	'venue' => null,
 	'team' => null,
+	'competitions' => null,
+	'filter' => 'both',
 	'player' => null,
 	'number' => -1,
 	'show_team_logo' => get_option( 'sportspress_event_blocks_show_logos', 'yes' ) == 'yes' ? true : false,
@@ -71,6 +73,10 @@ if ( $team )
 	$calendar->team = $team;
 if ( $player )
 	$calendar->player = $player;
+if ( $competitions )
+	$calendar->competitions = $competitions;
+if ( $filter )
+	$calendar->filter = $filter;
 if ( $order != 'default' )
 	$calendar->order = $order;
 if ( $orderby != 'default' )
