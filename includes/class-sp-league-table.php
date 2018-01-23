@@ -47,7 +47,7 @@ class SP_League_Table extends SP_Secondary_Post {
 		endif;
 		if ( $this->filter ):
 			$filter = $this->filter;
-		elseif ( isset( $competitions ) ):
+		elseif ( isset( $competitions ) && !empty($competitions) ):
 			$filter = 'competition';
 		else:
 			$filter = 'both';

@@ -80,8 +80,9 @@ class SP_Meta_Box_Table_Details {
 			</div>
 			<div class="sp-event-competition-field">
 			<p><strong><?php _e( 'Competition', 'sportspress' ); ?></strong></p>
-			<?php if ( ! sp_dropdown_pages( $args_comp ) ) {
-						//unset( $args_comp['tax_query'] );
+			<?php if ( ! sp_dropdown_pages( $args_comp ) ) { ?>
+			&mdash; None &mdash;
+			<?php
 						//sp_dropdown_pages( $args_comp );
 					}?>
 			</div>
