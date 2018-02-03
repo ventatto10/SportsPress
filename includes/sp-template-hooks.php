@@ -7,7 +7,7 @@
  * @author 		ThemeBoy
  * @category 	Core
  * @package 	SportsPress/Functions
- * @version		2.5.1
+ * @version		2.5.10
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -183,6 +183,15 @@ function sportspress_show_future_posts( $where, $that ) {
     return $where;
 }
 add_filter( 'posts_where', 'sportspress_show_future_posts', 2, 10 );
+
+function sportspress_redirect_future_events() {
+	if ( is_main_query() && 'sp_event' == get_query_var( 'post_type' ) && 'future' == get_post_status( get_query_var( 'p' ) ) && ! empty( $_GET['p'] ) ) {
+		if ( $redirect_url = get_post_permalink( get_query_var( 'p' ), false, true ) )
+			wp_redirect( $redirect_url, 301 );
+			die();
+	}
+}
+add_action( 'template_redirect', 'sportspress_redirect_future_events' );
 
 function sportspress_give_event_read_permissions( $allcaps, $caps, $args ) {
 
