@@ -28,6 +28,8 @@ class SportsPress_Gutenberg {
 		// Define constants
 		$this->define_constants();
 
+		add_action( 'init', array( $this, 'init' ) );
+		add_filter( 'block_categories', array( $this, 'block_categories' ) );
 		add_filter( 'gutenberg_can_edit_post_type', array( $this, 'can_edit_post_type' ), 10, 2 );
 	}
 
@@ -43,6 +45,35 @@ class SportsPress_Gutenberg {
 
 		if ( !defined( 'SP_GUTENBERG_DIR' ) )
 			define( 'SP_GUTENBERG_DIR', plugin_dir_path( __FILE__ ) );
+	}
+
+	/**
+	 * Enqueue editor assets.
+	*/
+	public function init() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+			// Gutenberg is not active.
+			return;
+		}
+
+		wp_enqueue_script(
+			'sportspress-gutenberg',
+			SP()->plugin_url() . '/assets/js/admin/gutenberg.js',
+			[ 'wp-editor', 'wp-blocks', 'wp-i18n', 'wp-element' ],
+			SP_VERSION
+		);
+	}
+
+	/**
+	 * Add block category.
+	*/
+	public function block_categories( $categories ) {
+		$categories[] = array(
+			'slug' => 'sportspress',
+			'title' => __( 'SportsPress', 'sportspress' ),
+		);
+		
+		return $categories;
 	}
 
 	/**
