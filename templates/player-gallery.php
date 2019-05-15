@@ -152,6 +152,13 @@ echo apply_filters( 'gallery_style', $gallery_style . "\n\t\t" );
 
 			$caption = get_the_title( $player_id );
 			$caption = trim( $caption );
+			$positions = array();
+			$positions_terms = get_the_terms( $player_id, 'sp_position' );
+			foreach ( $positions_terms as $positions_term ) {
+				$positions[] = $positions_term->name;
+			}
+			$positions = implode( ",", $positions );
+			//var_dump($positions);
 
 			ob_start();
 
@@ -163,6 +170,7 @@ echo apply_filters( 'gallery_style', $gallery_style . "\n\t\t" );
 		    	'caption' => $caption,
 		    	'size' => $size,
 		    	'link_posts' => $link_posts,
+				'positions' => $positions,
 		    ) );
 
 			$gallery .= ob_get_clean();

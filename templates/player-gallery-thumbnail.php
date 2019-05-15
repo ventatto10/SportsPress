@@ -16,6 +16,7 @@ $defaults = array(
 	'caption' => null,
 	'size' => 'sportspress-crop-medium',
 	'link_posts' => get_option( 'sportspress_link_players', 'yes' ) == 'yes' ? true : false,
+	'positions' => null,
 );
 
 extract( $defaults, EXTR_SKIP );
@@ -28,6 +29,9 @@ if ( '' !== $player_number )
 // Add caption tag if has caption
 if ( $captiontag && $caption )
 	$caption = '<' . $captiontag . ' class="wp-caption-text gallery-caption small-3 columns' . ( '' !== $player_number ? ' has-number' : '' ) . '">' . wptexturize( $caption ) . '</' . $captiontag . '>';
+
+if ( $positions != null )
+	$caption .= '<' . $captiontag . ' class="wp-caption-text gallery-caption small-3 columns sp-gallery-positions">' . wptexturize( $positions ) . '</' . $captiontag . '>';
 
 if ( $link_posts )
 	$caption = '<a href="' . get_permalink( $id ) . '">' . $caption . '</a>';
