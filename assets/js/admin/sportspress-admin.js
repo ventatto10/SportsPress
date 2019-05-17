@@ -893,9 +893,11 @@ jQuery(document).ready(function($){
 	// Show and hide GoogleMaps API field
 	$("input[id$='googlemaps']").click(function() {
 		$('#googlemaps_ip_field').show();
+		$("input[id$='sportspress_googlemaps_api']").prop('required',true);
 	});
 
 	$("input[id$='openstreetmap']").click(function() {
 	  $('#googlemaps_ip_field').hide();
+	  $("input[id$='sportspress_googlemaps_api']").prop('required',false);
 	});
 });

@@ -210,8 +210,10 @@ if ( ! class_exists( 'SportsPress_Maps' ) ) :
 
 		if ( $maps_provider != 'googlemaps' ) {
 			$hide_api = 'style="display:none;"';
+			$required = null;
 		} else {
 			$hide_api = null;
+			$required = ' required';
 		}
 		?>
 		<tr valign="top">
@@ -225,7 +227,7 @@ if ( ! class_exists( 'SportsPress_Maps' ) ) :
 						<li><label><input name="sportspress_maps_provider" id="googlemaps" value="googlemaps" type="radio" <?php checked( $maps_provider, 'googlemaps' ); ?>> GoogleMaps</label></li>
 					</ul>
 				</fieldset>
-				<div id="googlemaps_ip_field" <?php echo $hide_api; ?>><input name="sportspress_googlemaps_api" id="sportspress_googlemaps_api" type="text" value="<?php echo $googlemaps_api; ?>"> <span class="description">Add your own GoogleMaps API. For more info check <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">HERE</a>.</span></div>
+				<div id="googlemaps_ip_field" <?php echo $hide_api; ?>><input name="sportspress_googlemaps_api" id="sportspress_googlemaps_api" type="text" value="<?php echo $googlemaps_api; ?>"<?php echo $required; ?>> <span class="description">Add your own GoogleMaps API. For more info check <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">HERE</a>.</span></div>
 			</td>
 		</tr>
 		<?php
