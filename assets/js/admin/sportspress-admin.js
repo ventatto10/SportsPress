@@ -889,4 +889,13 @@ jQuery(document).ready(function($){
 
 	// Trigger box score time converter
 	$('.sp-convert-time-input').change();
+	
+	// Show and hide GoogleMaps API field
+	$("input[id$='googlemaps']").click(function() {
+		$('#googlemaps_ip_field').show();
+	});
+
+	$("input[id$='openstreetmap']").click(function() {
+	  $('#googlemaps_ip_field').hide();
+	});
 });
