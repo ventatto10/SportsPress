@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: SportsPress OpenStreetMap Integration
+Plugin Name: SportsPress Maps
 Plugin URI: http://themeboy.com/
-Description: Integrate OpenStreetMap to SportsPress.
+Description: Integrate OpenStreetMap and GoogleMaps to SportsPress.
 Author: ThemeBoy
 Author URI: http://themeboy.com/
 Version: 2.7
@@ -11,16 +11,16 @@ Version: 2.7
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'SportsPress_OpenStreetMap' ) && get_option( 'sportspress_load_google_maps_module', 'no' ) == 'no' ) :
+if ( ! class_exists( 'SportsPress_Maps' ) ) :
 
 /**
- * Main SportsPress OpenStreetMap Class
+ * Main SportsPress Maps Class
  *
- * @class SportsPress_OpenStreetMap
+ * @class SportsPress_Maps
  * @version	2.7
  */
  
- class SportsPress_OpenStreetMap {
+ class SportsPress_Maps {
 
 	/**
 	 * Constructor
@@ -28,15 +28,18 @@ if ( ! class_exists( 'SportsPress_OpenStreetMap' ) && get_option( 'sportspress_l
 	public function __construct() {
 		// Define constants
 		$this->define_constants();
+		$this->id    = 'general';
 
 		// Actions
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'sp_venue_show_openstreetmap', array( $this, 'show_venue_openstreetmap' ), 10, 5 );
+		add_action( 'sportspress_admin_field_maps', array( $this, 'maps_setting' ) );
+		add_action( 'sportspress_settings_save_' . $this->id, array( $this, 'save' ) );
 
 		// Filters
-		//add_filter( 'sportspress_openstreetmap', array( $this, 'add_options' ) );
+		add_filter( 'sportspress_general_options', array( $this, 'add_general_options' ) );
 
 	}
 	
@@ -140,10 +143,60 @@ if ( ! class_exists( 'SportsPress_OpenStreetMap' ) && get_option( 'sportspress_l
   </script>
 		<?php
 	}
-			
+	
+	/**
+	 * Save settings
+	 */
+	public function save() {
+		if ( isset( $_POST['sportspress_maps_provider'] ) )
+	    	update_option( 'sportspress_maps_provider', $_POST['sportspress_maps_provider'] );
+		
+		if ( isset( $_POST['sportspress_googlemaps_api'] ) )
+	    	update_option( 'sportspress_googlemaps_api', $_POST['sportspress_googlemaps_api'] );
+	}
+	
+	/**
+	 * Add option to SportsPress General Settings.
+	 */
+	public function add_general_options( $settings ) {
+		$settings[] = array( 'type' => 'maps' );
+
+		return $settings;
+	}
+	
+	/**
+	 * Maps settings
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function maps_setting() {
+		$maps_provider = get_option( 'sportspress_maps_provider', 'openstreetmap' );
+		if ( $maps_provider != 'googlemaps' ) {
+			$hide_api = 'style="display:none;"';
+		} else {
+			$hide_api = null;
+		}
+		?>
+		<tr valign="top">
+			<th scope="row" class="titledesc">
+				<label for="sportspress_maps_provider">Maps</label>
+			</th>
+			<td class="forminp forminp-radio">
+				<fieldset>
+					<ul>
+						<li><label><input name="sportspress_maps_provider" value="openstreetmap" type="radio" <?php checked( $maps_provider, 'openstreetmap' ); ?>> OpenStreetMap</label></li>
+						<li><label><input name="sportspress_maps_provider" value="googlemaps" type="radio" <?php checked( $maps_provider, 'googlemaps' ); ?>> GoogleMaps</label></li>
+					</ul>
+				</fieldset>
+				<div id="googlemaps_ip_field" <?php echo $hide_api; ?>><input name="sportspress_googlemaps_api" id="sportspress_googlemaps_api" type="text"> <span class="description">Add your own GoogleMaps API. For more info check <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">HERE</a>.</span></div>
+			</td>
+		</tr>
+		<?php
+	}
+	
 }
 
 endif;
-if ( get_option( 'sportspress_load_google_maps_module', 'no' ) == 'no' ) {
-	new SportsPress_OpenStreetMap();
-}
+
+	new SportsPress_Maps();
