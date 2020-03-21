@@ -66,10 +66,12 @@ class SP_Meta_Box_Event_Officials {
     }
   }
 
-  /**
-   * Save meta box data
-   */
-  public static function save( $post_id, $post ) {
-    update_post_meta( $post_id, 'sp_officials', sp_array_value( $_POST, 'sp_officials', array() ) );
-  }
+	/**
+	* Save meta box data
+	*/
+	public static function save( $post_id, $post ) {
+		$sp_officials = sp_array_value( $_POST, 'sp_officials', array() );
+		update_post_meta( $post_id, 'sp_officials', $sp_officials );
+		sp_update_post_meta_recursive( $post_id, 'sp_official', $sp_officials );
+	}
 }
