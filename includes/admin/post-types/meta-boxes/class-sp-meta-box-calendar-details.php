@@ -144,6 +144,7 @@ class SP_Meta_Box_Calendar_Details {
 				endif;
 				?>
 			</p>
+			<?php do_action( 'sportspress_calendar_filter_officials', $post ); ?>
 			<p><strong><?php _e( 'Sort by', 'sportspress' ); ?></strong></p>
 			<p>
 				<select name="sp_orderby">
@@ -183,5 +184,7 @@ class SP_Meta_Box_Calendar_Details {
 		update_post_meta( $post_id, 'sp_order', sp_array_value( $_POST, 'sp_order', null ) );
 		sp_update_post_meta_recursive( $post_id, 'sp_team', sp_array_value( $_POST, 'sp_team', array() ) );
 		sp_update_post_meta_recursive( $post_id, 'sp_player', sp_array_value( $_POST, 'sp_player', array() ) );
+		
+		do_action( 'sportspress_calendar_filter_officials_save', $post_id );
 	}
 }

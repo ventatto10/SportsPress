@@ -48,6 +48,9 @@ class SP_Calendar extends SP_Secondary_Post {
 
 	/** @var int The player ID. */
 	public $player;
+	
+	/** @var int The official ID. */
+	public $official;
 
 	/** @var int Number of events. */
 	public $number;
@@ -308,6 +311,14 @@ class SP_Calendar extends SP_Secondary_Post {
 				'compare' => 'IN',
 			);
 		endif;
+		
+		if ( $this->official ):
+			$args['meta_query'][] = array(
+				'key' => 'sp_official',
+				'value' => array( $this->official ),
+				'compare' => 'IN',
+			);
+		endif;
 
 		if ( $this->event_format && 'all' != $this->event_format ):
 			$args['meta_query'][] = array(
@@ -335,6 +346,7 @@ class SP_Calendar extends SP_Secondary_Post {
 				$venues = get_the_terms( $this->ID, 'sp_venue' );
 				$teams = array_filter( get_post_meta( $this->ID, 'sp_team', false ) );
 				$players = array_filter( get_post_meta( $this->ID, 'sp_player', false ) );
+				$officials = array_filter( get_post_meta( $this->ID, 'sp_official', false ) );
 				$table = get_post_meta( $this->ID, 'sp_table', true );
 
 				if ( ! isset( $league_ids ) ) $league_ids = array();
@@ -402,12 +414,20 @@ class SP_Calendar extends SP_Secondary_Post {
 					'compare' => 'IN',
 				);
 			}
+			
+			if ( ! empty( $officials ) ) {
+				$args['meta_query'][]	= array(
+					'key' => 'sp_official',
+					'value' => $officials,
+					'compare' => 'IN',
+				);
+			}
 		
 			if ( $this->event) {
 				$args['p'] = $this->event;
 				$args['post_status'] = array( 'publish', 'future' );
 			}
-
+			
 			if ( 'auto' === $this->date && 'any' === $this->status ) {
 				$args['post_status'] = 'publish';
 				$args['order'] = 'DESC';

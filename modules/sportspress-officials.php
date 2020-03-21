@@ -42,6 +42,8 @@ class SportsPress_Officials {
 		add_action( 'edited_sp_duty', array( $this, 'save_taxonomy_fields' ), 10, 1 );
 		add_action( 'admin_menu', array( $this, 'duties_menu' ) );
 		add_action( 'parent_file', array( $this, 'parent_file' ) );
+		add_action( 'sportspress_calendar_filter_officials', array( $this, 'filter_officials' ), 10, 1 );
+		add_action( 'sportspress_calendar_filter_officials_save', array( $this, 'filter_officials_save' ), 10, 1 );
 
 		// Filters
 		add_filter( 'sportspress_meta_boxes', array( $this, 'add_meta_boxes' ) );
@@ -305,6 +307,39 @@ class SportsPress_Officials {
 			}
 		}
 	}
+	
+	/**
+	/* Calendar filter option
+	 */
+	 public function filter_officials( $post ) { 
+		$officials = get_post_meta( $post->ID, 'sp_official', false ); ?>
+		<p><strong><?php _e( 'Official', 'sportspress' ); ?></strong></p>
+		<p>
+			<?php
+			$args = array(
+				'post_type' => 'sp_official',
+				'name' => 'sp_official[]',
+				'selected' => $officials,
+				'values' => 'ID',
+				'class' => 'widefat',
+				'property' => 'multiple',
+				'chosen' => true,
+				'placeholder' => __( 'All', 'sportspress' ),
+			);
+			if ( ! sp_dropdown_pages( $args ) ):
+				sp_post_adder( 'sp_official', __( 'Add New', 'sportspress' )  );
+			endif;
+				?>
+		</p>
+	 <?php
+	 }
+	 
+	 /**
+	/* Calendar save filter option
+	 */
+	 public function filter_officials_save( $post_id ) {
+		 sp_update_post_meta_recursive( $post_id, 'sp_official', sp_array_value( $_POST, 'sp_official', array() ) );
+	 }
 
 	/**
 	 * Add meta boxes.
