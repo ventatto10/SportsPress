@@ -151,7 +151,8 @@ class SP_Template_Loader {
 	public function event_content( $content ) {
 		if ( is_singular( 'sp_event' ) ) {
 			$status = sp_get_status( get_the_ID() );
-			if ( 'results' == $status ) {
+			$event_status = get_post_meta( get_the_ID(), 'sp_status', true );
+			if ( 'results' == $status || 'ok' != $event_status ) {
 				$caption = __( 'Recap', 'sportspress' );
 			} else {
 				$caption = __( 'Preview', 'sportspress' );

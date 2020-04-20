@@ -47,7 +47,12 @@
 						</time>
 						<?php
 
-						$status = __( 'Preview', 'sportspress' );
+						$event_status = get_post_meta( get_the_ID(), 'sp_status', true );
+						if ( 'ok' != $event_status ) {
+							$status = __( 'Recap', 'sportspress' );
+						}else{
+							$status = __( 'Preview', 'sportspress' );
+						}
 						
 						if ( $show_time ) {
 							?>
