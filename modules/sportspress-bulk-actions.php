@@ -111,11 +111,21 @@ class SportsPress_Bulk_Actions {
     if ( 'sp_postpone' == $doaction ) {
       foreach ( $post_ids as $post_id ) {
         update_post_meta( $post_id, 'sp_status', 'postponed' );
+        // Update post title following event status update
+        $post = array();
+        $post['ID'] = $post_id;
+        $post['post_title'] = '[POSTPONED] ' . get_the_title($post_id);
+        wp_insert_post($post);
       }
       $redirect_to = add_query_arg( 'sp_bulk_postponed_events', count( $post_ids ), $redirect_to );
     } elseif ( 'sp_cancel' == $doaction ) {
       foreach ( $post_ids as $post_id ) {
         update_post_meta( $post_id, 'sp_status', 'cancelled' );
+        // Update post title following event status update
+        $post = array();
+        $post['ID'] = $post_id;
+        $post['post_title'] = '[CANCELLED] ' . get_the_title($post_id);
+        wp_insert_post($post);
       }
       $redirect_to = add_query_arg( 'sp_bulk_cancelled_events', count( $post_ids ), $redirect_to );
     }
