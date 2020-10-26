@@ -1,11 +1,13 @@
 <?php
 /**
  * iCal Feed
+ * 
+ * Modified to add "[EVENT_STATUS] " before event title when it is postponed or cancelled. See lines 137-138.
  *
  * @author 		ThemeBoy
  * @category 	Feeds
  * @package 	SportsPress/Feeds
- * @version     2.6.15
+ * @version     2.6.15.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -132,7 +134,8 @@ foreach ( $events as $event):
 	if ( sizeof( $results ) ) {
 		$summary = implode( ' ', $results );
 	} else {
-		$summary = $event->post_title;
+        $event_status = get_post_meta($event->ID, 'sp_status', true);
+		$summary = ($event_status != 'ok') ? '[' . strtoupper($event_status) . '] ' . $event->post_title : $event->post_title;
 	}
 	
 	//Convert &#[0-9]+ entities to UTF-8
