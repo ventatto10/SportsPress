@@ -112,30 +112,22 @@ class SportsPress_Bulk_Actions {
       foreach ( $post_ids as $post_id ) {
         update_post_meta( $post_id, 'sp_status', 'postponed' );
         // Update post title following event status update
-        $post = array();
-        $post['ID'] = $post_id;
-        //$post['post_date'] = get_post_time('U', false, $post_id, true);
-        $post['post_type'] = 'sp_event';
-        $post['post_status'] = 'publish';
+        $curr_post = get_post($post_id);
         $prefix = array("[POSTPONED] " => "", "[CANCELLED] " => "");
-        $title = strtr(get_the_title($post_id), $prefix);
-        $post['post_title'] = '[POSTPONED] ' . $title;
-        wp_insert_post($post);
+        $title = strtr($curr_post->post_title, $prefix);
+        $curr_post->post_title = '[POSTPONED] ' . $title;
+        wp_insert_post($curr_post);
       }
       $redirect_to = add_query_arg( 'sp_bulk_postponed_events', count( $post_ids ), $redirect_to );
     } elseif ( 'sp_cancel' == $doaction ) {
       foreach ( $post_ids as $post_id ) {
         update_post_meta( $post_id, 'sp_status', 'cancelled' );
         // Update post title following event status update
-        $post = array();
-        $post['ID'] = $post_id;
-        //$post['post_date'] = get_post_time('U', false, $post_id, true);
-        $post['post_type'] = 'sp_event';
-        $post['post_status'] = 'publish';
+        $curr_post = get_post($post_id);
         $prefix = array("[POSTPONED] " => "", "[CANCELLED] " => "");
-        $title = strtr(get_the_title($post_id), $prefix);
-        $post['post_title'] = '[CANCELLED] ' . $title;
-        wp_insert_post($post);
+        $title = strtr($curr_post->post_title, $prefix);
+        $curr_post->post_title = '[CANCELLED] ' . $title;
+        wp_insert_post($curr_post);
       }
       $redirect_to = add_query_arg( 'sp_bulk_cancelled_events', count( $post_ids ), $redirect_to );
     }
